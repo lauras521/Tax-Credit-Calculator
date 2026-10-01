@@ -24,6 +24,7 @@
     body { background-color: var(--bg); color: var(--text-main); padding: 20px; display: flex; justify-content: center; min-height: 100vh; align-items: center; }
     .container { width: 100%; max-width: 860px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 28px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); }
     
+    /* Top Hero Banner */
     .top-hero-banner {
       background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(192, 38, 211, 0.15));
       border: 2px solid var(--sgo-total-cyan);
@@ -48,12 +49,51 @@
       box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
     }
 
+    /* Filing Status Segmented Control */
+    .status-toggle-wrapper {
+      margin-bottom: 16px;
+      background: rgba(15, 23, 42, 0.6);
+      padding: 14px 20px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .status-label { font-size: 0.95rem; font-weight: 600; color: var(--text-muted); }
+    .toggle-buttons {
+      display: flex;
+      background: #090d16;
+      padding: 4px;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+    }
+    .toggle-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 8px 16px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .toggle-btn.active {
+      background: var(--sgo-total-cyan);
+      color: #0f172a;
+      box-shadow: 0 2px 8px rgba(6, 182, 212, 0.4);
+    }
+
+    /* Controls Grid */
     .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; background: rgba(15, 23, 42, 0.6); padding: 18px 20px; border-radius: 12px; border: 1px solid var(--card-border); }
     .control-group { display: flex; flex-direction: column; gap: 8px; }
     .control-header { display: flex; justify-content: space-between; font-weight: 600; font-size: 0.95rem; color: var(--text-muted); }
     .control-value { font-size: 1.25rem; font-weight: 700; color: var(--sgo-total-cyan); }
     input[type="range"] { accent-color: var(--sgo-total-cyan); cursor: pointer; width: 100%; height: 6px; border-radius: 3px; }
 
+    /* Metrics Breakdown */
     .metrics-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
     .metric-card { background: rgba(15, 23, 42, 0.4); border: 1px solid var(--card-border); border-radius: 12px; padding: 16px; display: flex; justify-content: space-between; align-items: center; }
     .metric-card.mo { border-left: 4px solid var(--moscholars-green); }
@@ -65,6 +105,7 @@
 
     .section-title { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 8px; display: flex; justify-content: space-between; }
 
+    /* Stacked Visual Bars */
     .bar-wrapper { margin-bottom: 24px; }
     .stacked-bar-container { height: 48px; background: var(--neutral-bar-bg); border-radius: 10px; overflow: hidden; display: flex; border: 1px solid var(--card-border); }
     .bar-segment { height: 100%; display: flex; align-items: center; justify-content: center; transition: width 0.3s ease; color: #ffffff; font-weight: 700; font-size: 0.85rem; padding: 0 8px; white-space: nowrap; overflow: hidden; }
@@ -77,6 +118,7 @@
 
     @media (max-width: 640px) {
       .controls-grid, .metrics-row { grid-template-columns: 1fr; }
+      .status-toggle-wrapper { flex-direction: column; align-items: flex-start; gap: 10px; }
       .top-hero-banner { flex-direction: column; gap: 12px; text-align: center; }
     }
   </style>
@@ -84,14 +126,25 @@
 <body>
 
 <div class="container">
+  <!-- Top Banner -->
   <div class="top-hero-banner">
     <div>
-      <div class="hero-title">Total Tax Savings</div>
+      <div class="hero-title">Total Redirected Tax Dollars</div>
       <div class="hero-amount" id="hero-sgo-total">$6,826</div>
     </div>
-    <div class="zero-cost-badge">$0 Out-Of-Pocket for You - The Tax Payer</div>
+    <div class="zero-cost-badge">$0 Out-Of-Pocket</div>
   </div>
 
+  <!-- Filing Status Toggle -->
+  <div class="status-toggle-wrapper">
+    <span class="status-label">Tax Filing Status</span>
+    <div class="toggle-buttons">
+      <button type="button" class="toggle-btn active" id="btn-mfj" onclick="setFilingStatus('mfj')">Married Filing Jointly</button>
+      <button type="button" class="toggle-btn" id="btn-single" onclick="setFilingStatus('single')">Single / Head of Household</button>
+    </div>
+  </div>
+
+  <!-- Sliders -->
   <div class="controls-grid">
     <div class="control-group">
       <div class="control-header">
@@ -109,6 +162,7 @@
     </div>
   </div>
 
+  <!-- Metric Breakdown Cards -->
   <div class="metrics-row">
     <div class="metric-card mo">
       <div>
@@ -120,12 +174,13 @@
     <div class="metric-card fed">
       <div>
         <div class="metric-label">EFTC Credit Limit (Federal)</div>
-        <div style="font-size: 0.75rem; color: #64748b;">Up to $3,400 Cap (MFJ)</div>
+        <div style="font-size: 0.75rem; color: #64748b;" id="eftc-subtext">Up to $3,400 Cap (MFJ)</div>
       </div>
       <div class="metric-val val-fed" id="card-fed-val">$3,400</div>
     </div>
   </div>
 
+  <!-- State Tax Progress Bar -->
   <div class="bar-wrapper">
     <div class="section-title">
       <span>Missouri State Tax Redirection</span>
@@ -137,6 +192,7 @@
     </div>
   </div>
 
+  <!-- Federal Tax Progress Bar -->
   <div class="bar-wrapper">
     <div class="section-title">
       <span>Federal Tax Redirection (EFTC)</span>
@@ -154,7 +210,23 @@
 </div>
 
 <script>
+  let filingStatus = 'mfj';
+
   const formatCurr = (val) => '$' + Math.round(val).toLocaleString();
+
+  function setFilingStatus(status) {
+    filingStatus = status;
+    
+    // Toggle active state on buttons
+    document.getElementById('btn-mfj').classList.toggle('active', status === 'mfj');
+    document.getElementById('btn-single').classList.toggle('active', status === 'single');
+    
+    // Update metric card description
+    const subtext = status === 'mfj' ? 'Up to $3,400 Cap (MFJ)' : 'Up to $1,700 Cap (Single)';
+    document.getElementById('eftc-subtext').innerText = subtext;
+
+    updateModel();
+  }
 
   function updateModel() {
     const agi = parseInt(document.getElementById('agi-slider').value);
@@ -163,33 +235,44 @@
     document.getElementById('agi-display').innerText = formatCurr(agi);
     document.getElementById('dep-display').innerText = dependents;
 
-    // 1. MO Tax Calculation (MFJ)
-    const moStdDed = 29200;
+    // 1. Missouri State Tax Calculation
+    const isMFJ = filingStatus === 'mfj';
+    const moStdDed = isMFJ ? 29200 : 14600;
     const moTaxable = Math.max(0, agi - moStdDed);
     const moTax = moTaxable * 0.047;
     const moScholars = moTax * 0.50;
     const moTaxRemaining = moTax - moScholars;
 
-    // 2. Federal Net Tax Calculation (after CTC)
-    const fedStdDed = 30000;
+    // 2. Federal Net Tax Calculation
+    const fedStdDed = isMFJ ? 30000 : 15000;
     const fedTaxable = Math.max(0, agi - fedStdDed);
     let fedGross = 0;
-    if (fedTaxable <= 23200) fedGross = fedTaxable * 0.10;
-    else if (fedTaxable <= 94300) fedGross = 2320 + (fedTaxable - 23200) * 0.12;
-    else if (fedTaxable <= 201050) fedGross = 10852 + (fedTaxable - 94300) * 0.22;
-    else if (fedTaxable <= 383900) fedGross = 34337 + (fedTaxable - 201050) * 0.24;
-    else fedGross = 78201 + (fedTaxable - 383900) * 0.32;
+
+    if (isMFJ) {
+      if (fedTaxable <= 23200) fedGross = fedTaxable * 0.10;
+      else if (fedTaxable <= 94300) fedGross = 2320 + (fedTaxable - 23200) * 0.12;
+      else if (fedTaxable <= 201050) fedGross = 10852 + (fedTaxable - 94300) * 0.22;
+      else if (fedTaxable <= 383900) fedGross = 34337 + (fedTaxable - 201050) * 0.24;
+      else fedGross = 78201 + (fedTaxable - 383900) * 0.32;
+    } else {
+      if (fedTaxable <= 11600) fedGross = fedTaxable * 0.10;
+      else if (fedTaxable <= 47150) fedGross = 1160 + (fedTaxable - 11600) * 0.12;
+      else if (fedTaxable <= 100525) fedGross = 5426 + (fedTaxable - 47150) * 0.22;
+      else if (fedTaxable <= 191950) fedGross = 17168.5 + (fedTaxable - 100525) * 0.24;
+      else fedGross = 39110.5 + (fedTaxable - 191950) * 0.32;
+    }
 
     const ctc = Math.min(fedGross, dependents * 2000);
     const fedNetTax = Math.max(0, fedGross - ctc);
 
-    // 3. EFTC Allocation ($3,400 MFJ limit)
-    const eftc = Math.min(3400, fedNetTax);
+    // 3. EFTC Allocation Limit ($3,400 for MFJ vs $1,700 for Single)
+    const eftcLimit = isMFJ ? 3400 : 1700;
+    const eftc = Math.min(eftcLimit, fedNetTax);
     const fedTaxRemaining = Math.max(0, fedNetTax - eftc);
 
     const totalSgo = moScholars + eftc;
 
-    // Top Card Updates
+    // Update Banner & Cards
     document.getElementById('hero-sgo-total').innerText = formatCurr(totalSgo);
     document.getElementById('card-mo-val').innerText = formatCurr(moScholars);
     document.getElementById('card-fed-val').innerText = formatCurr(eftc);
@@ -198,7 +281,7 @@
     document.getElementById('mo-tax-label').innerText = `Total MO Tax: ${formatCurr(moTax)}`;
     document.getElementById('fed-tax-label').innerText = `Net Federal Tax: ${formatCurr(fedNetTax)}`;
 
-    // Missouri Bar Updates
+    // Missouri Progress Bar
     const moDenom = moTax > 0 ? moTax : 1;
     const pctMoScholars = (moScholars / moDenom) * 100;
     const pctMoRem = (moTaxRemaining / moDenom) * 100;
@@ -210,7 +293,7 @@
     barMoRem.style.width = pctMoRem + '%';
     barMoRem.innerText = `State Tax Owed: ${formatCurr(moTaxRemaining)}`;
 
-    // Federal Bar Updates
+    // Federal Progress Bar
     const fedDenom = fedNetTax > 0 ? fedNetTax : 1;
     const pctEftc = (eftc / fedDenom) * 100;
     const pctFedRem = (fedTaxRemaining / fedDenom) * 100;
