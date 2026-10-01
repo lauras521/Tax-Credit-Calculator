@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Missouri MOScholars & Federal EFTC Interactive Tax Model</title>
+  <title>SGO Tax Credit Allocation Model</title>
   <style>
     :root {
       --bg: #0f172a;
@@ -12,67 +12,86 @@
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       
-      /* Colors matching Choice B mockup */
-      --irs-blue: #2563eb;
+      /* Vibrant SGO Focused Palette */
+      --sgo-total-cyan: #06b6d4;
+      --moscholars-green: #10b981;
       --eftc-purple: #c026d3;
-      --ctc-green: #10b981;
-      --moscholars-teal: #059669;
-      --mo-amber: #d97706;
-      --accent-cyan: #06b6d4;
+      --neutral-bar-bg: #090d16;
+      --gov-remaining: #334155;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-    body { background-color: var(--bg); color: var(--text-main); padding: 24px; display: flex; justify-content: center; }
-    .container { width: 100%; max-width: 900px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 28px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); }
+    body { background-color: var(--bg); color: var(--text-main); padding: 20px; display: flex; justify-content: center; min-height: 100vh; align-items: center; }
+    .container { width: 100%; max-width: 860px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 28px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); }
     
-    h2 { font-size: 1.4rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-main); margin-bottom: 20px; border-bottom: 1px solid var(--card-border); padding-bottom: 12px; }
-    
-    /* Controls Section */
-    .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; background: rgba(15, 23, 42, 0.6); padding: 20px; border-radius: 12px; border: 1px solid var(--card-border); }
+    .top-hero-banner {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(192, 38, 211, 0.15));
+      border: 2px solid var(--sgo-total-cyan);
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .hero-title { font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; color: var(--text-muted); }
+    .hero-amount { font-size: 2.4rem; font-weight: 900; color: var(--sgo-total-cyan); line-height: 1.1; }
+    .zero-cost-badge {
+      background: #10b981;
+      color: #022c22;
+      font-weight: 800;
+      font-size: 0.85rem;
+      padding: 8px 16px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; background: rgba(15, 23, 42, 0.6); padding: 18px 20px; border-radius: 12px; border: 1px solid var(--card-border); }
     .control-group { display: flex; flex-direction: column; gap: 8px; }
     .control-header { display: flex; justify-content: space-between; font-weight: 600; font-size: 0.95rem; color: var(--text-muted); }
-    .control-value { font-size: 1.25rem; font-weight: 700; color: var(--accent-cyan); }
-    input[type="range"] { accent-color: var(--accent-cyan); cursor: pointer; width: 100%; height: 6px; border-radius: 3px; }
+    .control-value { font-size: 1.25rem; font-weight: 700; color: var(--sgo-total-cyan); }
+    input[type="range"] { accent-color: var(--sgo-total-cyan); cursor: pointer; width: 100%; height: 6px; border-radius: 3px; }
 
-    /* Summary Stats Cards */
-    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px; }
-    .stat-card { background: rgba(15, 23, 42, 0.4); border: 1px solid var(--card-border); border-radius: 10px; padding: 12px; text-align: center; }
-    .stat-label { font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600; margin-bottom: 4px; }
-    .stat-val { font-size: 1.15rem; font-weight: 700; color: var(--text-main); }
+    .metrics-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+    .metric-card { background: rgba(15, 23, 42, 0.4); border: 1px solid var(--card-border); border-radius: 12px; padding: 16px; display: flex; justify-content: space-between; align-items: center; }
+    .metric-card.mo { border-left: 4px solid var(--moscholars-green); }
+    .metric-card.fed { border-left: 4px solid var(--eftc-purple); }
+    .metric-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
+    .metric-val { font-size: 1.4rem; font-weight: 800; }
+    .val-mo { color: var(--moscholars-green); }
+    .val-fed { color: var(--eftc-purple); }
 
-    /* Section Headers */
-    .section-title { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 10px; display: flex; justify-content: space-between; }
+    .section-title { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 8px; display: flex; justify-content: space-between; }
 
-    /* Stacked Horizontal Bars */
-    .bar-wrapper { margin-bottom: 28px; }
-    .stacked-bar-container { height: 52px; background: #090d16; border-radius: 10px; overflow: hidden; display: flex; border: 1px solid var(--card-border); position: relative; }
-    .bar-segment { height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: width 0.3s ease; color: #ffffff; font-weight: 700; text-shadow: 0 1px 2px rgba(0,0,0,0.6); font-size: 0.85rem; padding: 0 4px; white-space: nowrap; overflow: hidden; }
+    .bar-wrapper { margin-bottom: 24px; }
+    .stacked-bar-container { height: 48px; background: var(--neutral-bar-bg); border-radius: 10px; overflow: hidden; display: flex; border: 1px solid var(--card-border); }
+    .bar-segment { height: 100%; display: flex; align-items: center; justify-content: center; transition: width 0.3s ease; color: #ffffff; font-weight: 700; font-size: 0.85rem; padding: 0 8px; white-space: nowrap; overflow: hidden; }
     
-    .bg-irs { background-color: var(--irs-blue); }
-    .bg-eftc { background-color: var(--eftc-purple); box-shadow: inset 0 0 10px rgba(255,255,255,0.2); }
-    .bg-ctc { background-color: var(--ctc-green); }
-    .bg-moscholars { background-color: var(--moscholars-teal); }
-    .bg-mo-tax { background-color: var(--mo-amber); }
+    .bg-moscholars { background-color: var(--moscholars-green); }
+    .bg-eftc { background-color: var(--eftc-purple); }
+    .bg-remaining { background-color: var(--gov-remaining); color: #94a3b8; font-weight: 500; }
 
-    /* Bottom Summary Box */
-    .summary-footer { display: flex; justify-content: space-between; align-items: center; background: rgba(6, 182, 212, 0.08); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 12px; padding: 18px 24px; margin-top: 10px; }
-    .summary-title { font-size: 1rem; font-weight: 600; color: var(--text-muted); }
-    .summary-total { font-size: 2rem; font-weight: 800; color: var(--accent-cyan); }
-    .summary-note { font-size: 0.82rem; color: var(--text-muted); max-width: 55%; text-align: right; line-height: 1.35; }
+    .footer-note { font-size: 0.82rem; color: var(--text-muted); text-align: center; margin-top: 16px; line-height: 1.4; }
 
-    @media (max-width: 680px) {
-      .controls-grid, .stats-row { grid-template-columns: 1fr 1fr; }
-      .summary-footer { flex-direction: column; text-align: center; gap: 12px; }
-      .summary-note { max-width: 100%; text-align: center; }
+    @media (max-width: 640px) {
+      .controls-grid, .metrics-row { grid-template-columns: 1fr; }
+      .top-hero-banner { flex-direction: column; gap: 12px; text-align: center; }
     }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <h2>Missouri MOScholars & Federal EFTC Interactive Allocation Model</h2>
+  <div class="top-hero-banner">
+    <div>
+      <div class="hero-title">Total Redirected SGO Tax Credits</div>
+      <div class="hero-amount" id="hero-sgo-total">$6,826</div>
+    </div>
+    <div class="zero-cost-badge">$0 Net Out-Of-Pocket</div>
+  </div>
 
-  <!-- Controls -->
   <div class="controls-grid">
     <div class="control-group">
       <div class="control-header">
@@ -90,60 +109,47 @@
     </div>
   </div>
 
-  <!-- Stat Cards -->
-  <div class="stats-row">
-    <div class="stat-card">
-      <div class="stat-label">Est. Total MO Tax</div>
-      <div class="stat-val" id="stat-mo-tax">$6,853</div>
+  <div class="metrics-row">
+    <div class="metric-card mo">
+      <div>
+        <div class="metric-label">MOScholars Credit Limit (MO)</div>
+        <div style="font-size: 0.75rem; color: #64748b;">50% of MO State Tax</div>
+      </div>
+      <div class="metric-val val-mo" id="card-mo-val">$3,426</div>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">MOScholars Max</div>
-      <div class="stat-val" id="stat-moscholars">$3,426</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Est. Total Fed Tax</div>
-      <div class="stat-val" id="stat-fed-tax">$22,006</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">EFTC Donation Max</div>
-      <div class="stat-val" id="stat-eftc">$1,700</div>
+    <div class="metric-card fed">
+      <div>
+        <div class="metric-label">EFTC Credit Limit (Federal)</div>
+        <div style="font-size: 0.75rem; color: #64748b;">Up to $3,400 Cap (MFJ)</div>
+      </div>
+      <div class="metric-val val-fed" id="card-fed-val">$3,400</div>
     </div>
   </div>
 
-  <!-- Federal Tax Bar Section -->
   <div class="bar-wrapper">
     <div class="section-title">
-      <span>Federal Tax Liability Redirection & CTC</span>
-      <span id="fed-total-label">Gross Tax: $22,006</span>
+      <span>Missouri State Tax Redirection</span>
+      <span id="mo-tax-label">Total MO Tax: $6,853</span>
     </div>
-    <div class="stacked-bar-container" id="fed-bar">
-      <div class="bar-segment bg-irs" id="seg-fed-irs">IRS Tax</div>
-      <div class="bar-segment bg-eftc" id="seg-eftc">EFTC ($1,700)</div>
-      <div class="bar-segment bg-ctc" id="seg-ctc">CTC ($4,000)</div>
+    <div class="stacked-bar-container">
+      <div class="bar-segment bg-moscholars" id="bar-moscholars">MOScholars (50%)</div>
+      <div class="bar-segment bg-remaining" id="bar-mo-rem">Remaining State Tax</div>
     </div>
   </div>
 
-  <!-- State Tax Bar Section -->
   <div class="bar-wrapper">
     <div class="section-title">
-      <span>Missouri State Tax Liability Redirection</span>
-      <span id="mo-total-label">Total Tax: $6,853</span>
+      <span>Federal Tax Redirection (EFTC)</span>
+      <span id="fed-tax-label">Net Federal Tax: $18,006</span>
     </div>
-    <div class="stacked-bar-container" id="mo-bar">
-      <div class="bar-segment bg-moscholars" id="seg-moscholars">MOScholars (50%)</div>
-      <div class="bar-segment bg-mo-tax" id="seg-mo-tax">Remaining MO Tax (50%)</div>
+    <div class="stacked-bar-container">
+      <div class="bar-segment bg-eftc" id="bar-eftc">EFTC ($3,400)</div>
+      <div class="bar-segment bg-remaining" id="bar-fed-rem">Remaining Federal Tax</div>
     </div>
   </div>
 
-  <!-- Summary Footer -->
-  <div class="summary-footer">
-    <div>
-      <div class="summary-title">Total Potential SGO Donation ($0 Net Out-Of-Pocket)</div>
-      <div class="summary-total" id="stat-total-sgo">$5,126</div>
-    </div>
-    <div class="summary-note">
-      *Note: Child Tax Credit (CTC) reduces gross federal tax owed first ($2,000 per child). EFTC and MOScholars then allow you to redirect remaining liability directly to scholarships.
-    </div>
+  <div class="footer-note">
+    *Both MOScholars and EFTC are dollar-for-dollar tax credits. Every dollar donated to an approved SGO directly reduces your state and federal tax bill by $1.00, resulting in <strong>$0 net out-of-pocket cost</strong>.
   </div>
 </div>
 
@@ -157,14 +163,14 @@
     document.getElementById('agi-display').innerText = formatCurr(agi);
     document.getElementById('dep-display').innerText = dependents;
 
-    // MO Tax Calculations
+    // 1. MO Tax Calculation (MFJ)
     const moStdDed = 29200;
     const moTaxable = Math.max(0, agi - moStdDed);
     const moTax = moTaxable * 0.047;
     const moScholars = moTax * 0.50;
     const moTaxRemaining = moTax - moScholars;
 
-    // Federal Tax Calculations (MFJ 2026 Brackets)
+    // 2. Federal Net Tax Calculation (after CTC)
     const fedStdDed = 30000;
     const fedTaxable = Math.max(0, agi - fedStdDed);
     let fedGross = 0;
@@ -174,67 +180,53 @@
     else if (fedTaxable <= 383900) fedGross = 34337 + (fedTaxable - 201050) * 0.24;
     else fedGross = 78201 + (fedTaxable - 383900) * 0.32;
 
-    // CTC ($2,000 per child, capped at gross fed tax)
-    const rawCtc = dependents * 2000;
-    const ctc = Math.min(fedGross, rawCtc);
-    const fedAfterCtc = Math.max(0, fedGross - ctc);
+    const ctc = Math.min(fedGross, dependents * 2000);
+    const fedNetTax = Math.max(0, fedGross - ctc);
 
-    // EFTC ($1,700 flat cap, capped at remaining federal tax after CTC)
-    const eftc = Math.min(1700, fedAfterCtc);
-    const fedRemaining = Math.max(0, fedAfterCtc - eftc);
+    // 3. EFTC Allocation ($3,400 MFJ limit)
+    const eftc = Math.min(3400, fedNetTax);
+    const fedTaxRemaining = Math.max(0, fedNetTax - eftc);
 
     const totalSgo = moScholars + eftc;
 
-    // Update Stat Cards
-    document.getElementById('stat-mo-tax').innerText = formatCurr(moTax);
-    document.getElementById('stat-moscholars').innerText = formatCurr(moScholars);
-    document.getElementById('stat-fed-tax').innerText = formatCurr(fedGross);
-    document.getElementById('stat-eftc').innerText = formatCurr(eftc);
-    document.getElementById('stat-total-sgo').innerText = formatCurr(totalSgo);
+    // Top Card Updates
+    document.getElementById('hero-sgo-total').innerText = formatCurr(totalSgo);
+    document.getElementById('card-mo-val').innerText = formatCurr(moScholars);
+    document.getElementById('card-fed-val').innerText = formatCurr(eftc);
 
-    document.getElementById('fed-total-label').innerText = `Gross Tax: ${formatCurr(fedGross)}`;
-    document.getElementById('mo-total-label').innerText = `Total Tax: ${formatCurr(moTax)}`;
+    // Section Header Labels
+    document.getElementById('mo-tax-label').innerText = `Total MO Tax: ${formatCurr(moTax)}`;
+    document.getElementById('fed-tax-label').innerText = `Net Federal Tax: ${formatCurr(fedNetTax)}`;
 
-    // Update Federal Bar Segments (%)
-    const fedTotalDenominator = fedGross > 0 ? fedGross : 1;
-    const pctIrs = (fedRemaining / fedTotalDenominator) * 100;
-    const pctEftc = (eftc / fedTotalDenominator) * 100;
-    const pctCtc = (ctc / fedTotalDenominator) * 100;
+    // Missouri Bar Updates
+    const moDenom = moTax > 0 ? moTax : 1;
+    const pctMoScholars = (moScholars / moDenom) * 100;
+    const pctMoRem = (moTaxRemaining / moDenom) * 100;
 
-    const segIrs = document.getElementById('seg-fed-irs');
-    const segEftc = document.getElementById('seg-eftc');
-    const segCtc = document.getElementById('seg-ctc');
+    const barMoSgo = document.getElementById('bar-moscholars');
+    const barMoRem = document.getElementById('bar-mo-rem');
+    barMoSgo.style.width = pctMoScholars + '%';
+    barMoSgo.innerText = `MOScholars Credit: ${formatCurr(moScholars)}`;
+    barMoRem.style.width = pctMoRem + '%';
+    barMoRem.innerText = `State Tax Owed: ${formatCurr(moTaxRemaining)}`;
 
-    segIrs.style.width = pctIrs + '%';
-    segIrs.innerText = pctIrs > 8 ? `IRS (${formatCurr(fedRemaining)})` : '';
+    // Federal Bar Updates
+    const fedDenom = fedNetTax > 0 ? fedNetTax : 1;
+    const pctEftc = (eftc / fedDenom) * 100;
+    const pctFedRem = (fedTaxRemaining / fedDenom) * 100;
 
-    segEftc.style.width = pctEftc + '%';
-    segEftc.innerText = pctEftc > 5 ? `EFTC (${formatCurr(eftc)})` : '';
-
-    segCtc.style.width = pctCtc + '%';
-    segCtc.innerText = pctCtc > 6 ? `CTC (${formatCurr(ctc)})` : '';
-
-    // Update MO Bar Segments (%)
-    const moTotalDenominator = moTax > 0 ? moTax : 1;
-    const pctMOScholars = (moScholars / moTotalDenominator) * 100;
-    const pctMoTax = (moTaxRemaining / moTotalDenominator) * 100;
-
-    const segMOScholars = document.getElementById('seg-moscholars');
-    const segMoTax = document.getElementById('seg-mo-tax');
-
-    segMOScholars.style.width = pctMOScholars + '%';
-    segMOScholars.innerText = `MOScholars (${formatCurr(moScholars)})`;
-
-    segMoTax.style.width = pctMoTax + '%';
-    segMoTax.innerText = `Remaining State Tax (${formatCurr(moTaxRemaining)})`;
+    const barEftc = document.getElementById('bar-eftc');
+    const barFedRem = document.getElementById('bar-fed-rem');
+    barEftc.style.width = pctEftc + '%';
+    barEftc.innerText = pctEftc > 5 ? `EFTC Credit: ${formatCurr(eftc)}` : '';
+    barFedRem.style.width = pctFedRem + '%';
+    barFedRem.innerText = pctFedRem > 15 ? `Federal Tax Owed: ${formatCurr(fedTaxRemaining)}` : '';
   }
 
   document.getElementById('agi-slider').addEventListener('input', updateModel);
   document.getElementById('dep-slider').addEventListener('input', updateModel);
 
-  // Initialize
   updateModel();
 </script>
-
 </body>
 </html>
