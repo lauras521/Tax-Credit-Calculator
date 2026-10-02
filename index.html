@@ -3,57 +3,114 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SGO Tax Credit Allocation Model</title>
+  <title>State and Federal Tax Credit Benefits</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800;900&family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0f172a;
-      --card-bg: #1e293b;
-      --card-border: #334155;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
+      /* Brand Color Palette */
+      --midnight-blue: #003866;  /* HEX #003866, PMS 2955 */
+      --forest-green: #014a2a;   /* HEX #014a2a, PMS 3435 */
+      --maize-yellow: #f0c808;   /* HEX #f0c808, PMS 7406 */
       
-      /* Vibrant SGO Focused Palette */
-      --sgo-total-cyan: #06b6d4;
-      --moscholars-green: #10b981;
-      --eftc-purple: #c026d3;
-      --neutral-bar-bg: #090d16;
-      --gov-remaining: #334155;
+      --bg: #001f38;
+      --card-bg: #002b4d;
+      --card-border: #004d8c;
+      --text-main: #f8fafc;
+      --text-muted: #cbd5e1;
+      --neutral-bar-bg: #001224;
+      --gov-remaining: #1a2638;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-    body { background-color: var(--bg); color: var(--text-main); padding: 20px; display: flex; justify-content: center; min-height: 100vh; align-items: center; }
-    .container { width: 100%; max-width: 860px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 28px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     
-    /* Top Hero Banner */
+    body { 
+      background-color: var(--bg); 
+      color: var(--text-main); 
+      padding: 24px 16px; 
+      display: flex; 
+      justify-content: center; 
+      min-height: 100vh; 
+      align-items: center; 
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 18px;
+    }
+
+    .container { 
+      width: 100%; 
+      max-width: 880px; 
+      background: var(--card-bg); 
+      border: 2px solid var(--card-border); 
+      border-radius: 16px; 
+      padding: 32px; 
+      box-shadow: 0 25px 35px -5px rgba(0, 0, 0, 0.6); 
+    }
+
+    /* Main Page Header */
+    .main-page-title {
+      font-family: 'Cinzel', serif;
+      text-align: center;
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: var(--maize-yellow);
+      margin-bottom: 24px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    }
+    
+    /* Top Hero Banner - Solid Midnight Blue */
     .top-hero-banner {
-      background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(192, 38, 211, 0.15));
-      border: 2px solid var(--sgo-total-cyan);
+      background: var(--midnight-blue);
+      border: 2px solid var(--maize-yellow);
       border-radius: 14px;
-      padding: 20px 24px;
+      padding: 22px 28px;
       margin-bottom: 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.2);
     }
-    .hero-title { font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; color: var(--text-muted); }
-    .hero-amount { font-size: 2.4rem; font-weight: 900; color: var(--sgo-total-cyan); line-height: 1.1; }
+    
+    .hero-title { 
+      font-family: 'Cinzel', serif;
+      font-size: 1rem; 
+      text-transform: uppercase; 
+      letter-spacing: 0.08em; 
+      font-weight: 700; 
+      color: #ffffff; 
+    }
+    
+    .hero-amount { 
+      font-family: 'Cinzel', serif;
+      font-size: 2.6rem; 
+      font-weight: 900; 
+      color: var(--maize-yellow); 
+      line-height: 1.1; 
+      margin-top: 4px;
+    }
+    
+    /* Out of Pocket Badge - Highlighted Forest Green */
     .zero-cost-badge {
-      background: #10b981;
-      color: #022c22;
-      font-weight: 800;
-      font-size: 0.85rem;
-      padding: 8px 16px;
-      border-radius: 20px;
+      background: var(--forest-green);
+      color: #ffffff;
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 10px 20px;
+      border-radius: 30px;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      letter-spacing: 0.06em;
+      border: 2px solid var(--maize-yellow);
+      box-shadow: 0 4px 14px rgba(1, 74, 42, 0.5);
     }
 
-    /* Filing Status Segmented Control */
+    /* Filing Status Control */
     .status-toggle-wrapper {
-      margin-bottom: 16px;
-      background: rgba(15, 23, 42, 0.6);
-      padding: 14px 20px;
+      margin-bottom: 20px;
+      background: var(--midnight-blue);
+      padding: 16px 22px;
       border-radius: 12px;
       border: 1px solid var(--card-border);
       display: flex;
@@ -61,78 +118,171 @@
       justify-content: space-between;
       gap: 16px;
     }
-    .status-label { font-size: 0.95rem; font-weight: 600; color: var(--text-muted); }
+    
+    .status-label { 
+      font-family: 'Cinzel', serif;
+      font-size: 1rem; 
+      font-weight: 700; 
+      color: #ffffff; 
+    }
+    
     .toggle-buttons {
       display: flex;
-      background: #090d16;
+      background: var(--neutral-bar-bg);
       padding: 4px;
       border-radius: 10px;
       border: 1px solid var(--card-border);
     }
+    
     .toggle-btn {
       background: transparent;
       border: none;
       color: var(--text-muted);
-      padding: 8px 16px;
+      padding: 9px 18px;
+      font-family: 'Cinzel', serif;
       font-size: 0.88rem;
       font-weight: 700;
       border-radius: 7px;
       cursor: pointer;
       transition: all 0.2s ease;
     }
+    
     .toggle-btn.active {
-      background: var(--sgo-total-cyan);
-      color: #0f172a;
-      box-shadow: 0 2px 8px rgba(6, 182, 212, 0.4);
+      background: var(--maize-yellow);
+      color: #000000;
+      box-shadow: 0 2px 8px rgba(240, 200, 8, 0.3);
     }
 
     /* Controls Grid */
-    .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; background: rgba(15, 23, 42, 0.6); padding: 18px 20px; border-radius: 12px; border: 1px solid var(--card-border); }
+    .controls-grid { 
+      display: grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap: 20px; 
+      margin-bottom: 24px; 
+      background: var(--midnight-blue); 
+      padding: 20px; 
+      border-radius: 12px; 
+      border: 1px solid var(--card-border); 
+    }
+    
     .control-group { display: flex; flex-direction: column; gap: 8px; }
-    .control-header { display: flex; justify-content: space-between; font-weight: 600; font-size: 0.95rem; color: var(--text-muted); }
-    .control-value { font-size: 1.25rem; font-weight: 700; color: var(--sgo-total-cyan); }
-    input[type="range"] { accent-color: var(--sgo-total-cyan); cursor: pointer; width: 100%; height: 6px; border-radius: 3px; }
+    .control-header { display: flex; justify-content: space-between; align-items: baseline; font-weight: 600; font-size: 1rem; color: #ffffff; }
+    
+    .control-value { 
+      font-family: 'Cinzel', serif;
+      font-size: 1.35rem; 
+      font-weight: 800; 
+      color: var(--maize-yellow); 
+    }
+    
+    input[type="range"] { 
+      accent-color: var(--maize-yellow); 
+      cursor: pointer; 
+      width: 100%; 
+      height: 8px; 
+      border-radius: 4px; 
+      background: var(--neutral-bar-bg);
+    }
 
-    /* Metrics Breakdown */
+    /* Metrics Cards */
     .metrics-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
-    .metric-card { background: rgba(15, 23, 42, 0.4); border: 1px solid var(--card-border); border-radius: 12px; padding: 16px; display: flex; justify-content: space-between; align-items: center; }
-    .metric-card.mo { border-left: 4px solid var(--moscholars-green); }
-    .metric-card.fed { border-left: 4px solid var(--eftc-purple); }
-    .metric-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
-    .metric-val { font-size: 1.4rem; font-weight: 800; }
-    .val-mo { color: var(--moscholars-green); }
-    .val-fed { color: var(--eftc-purple); }
+    
+    .metric-card { 
+      background: var(--midnight-blue); 
+      border: 1px solid var(--card-border); 
+      border-radius: 12px; 
+      padding: 18px; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+    }
+    
+    .metric-card.mo { border-left: 6px solid var(--forest-green); }
+    .metric-card.fed { border-left: 6px solid var(--forest-green); }
+    
+    .metric-label { font-size: 0.95rem; color: #ffffff; font-weight: 700; font-family: 'Cinzel', serif; }
+    .metric-val { font-family: 'Cinzel', serif; font-size: 1.5rem; font-weight: 800; color: #34d399; }
 
-    .section-title { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 8px; display: flex; justify-content: space-between; }
+    .section-title { 
+      font-family: 'Cinzel', serif;
+      font-size: 0.95rem; 
+      font-weight: 700; 
+      letter-spacing: 0.05em; 
+      color: var(--maize-yellow); 
+      margin-bottom: 8px; 
+      display: flex; 
+      justify-content: space-between; 
+    }
 
     /* Stacked Visual Bars */
     .bar-wrapper { margin-bottom: 24px; }
-    .stacked-bar-container { height: 48px; background: var(--neutral-bar-bg); border-radius: 10px; overflow: hidden; display: flex; border: 1px solid var(--card-border); }
-    .bar-segment { height: 100%; display: flex; align-items: center; justify-content: center; transition: width 0.3s ease; color: #ffffff; font-weight: 700; font-size: 0.85rem; padding: 0 8px; white-space: nowrap; overflow: hidden; }
     
-    .bg-moscholars { background-color: var(--moscholars-green); }
-    .bg-eftc { background-color: var(--eftc-purple); }
-    .bg-remaining { background-color: var(--gov-remaining); color: #94a3b8; font-weight: 500; }
+    .stacked-bar-container { 
+      height: 48px; 
+      background: var(--neutral-bar-bg); 
+      border-radius: 10px; 
+      overflow: hidden; 
+      display: flex; 
+      border: 1px solid var(--card-border); 
+      position: relative;
+    }
+    
+    .bar-segment { 
+      height: 100%; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+      color: #ffffff; 
+      font-family: 'EB Garamond', serif;
+      font-weight: 700; 
+      padding: 0 4px; 
+      white-space: nowrap; 
+      overflow: hidden; 
+      text-overflow: clip;
+      box-sizing: border-box;
+    }
 
-    .footer-note { font-size: 0.82rem; color: var(--text-muted); text-align: center; margin-top: 16px; line-height: 1.4; }
+    .bar-segment span {
+      display: inline-block;
+      white-space: nowrap;
+      transition: font-size 0.2s ease, opacity 0.2s ease;
+    }
+    
+    .bg-moscholars { background-color: var(--forest-green); }
+    .bg-eftc { background-color: var(--forest-green); }
+    .bg-remaining { background-color: var(--gov-remaining); color: var(--text-muted); font-weight: 500; }
+
+    .footer-note { 
+      font-size: 0.95rem; 
+      color: var(--text-muted); 
+      text-align: center; 
+      margin-top: 20px; 
+      line-height: 1.5; 
+      border-top: 1px solid var(--card-border);
+      padding-top: 16px;
+    }
 
     @media (max-width: 640px) {
       .controls-grid, .metrics-row { grid-template-columns: 1fr; }
-      .status-toggle-wrapper { flex-direction: column; align-items: flex-start; gap: 10px; }
-      .top-hero-banner { flex-direction: column; gap: 12px; text-align: center; }
+      .status-toggle-wrapper { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .top-hero-banner { flex-direction: column; gap: 16px; text-align: center; }
+      .main-page-title { font-size: 1.6rem; }
     }
   </style>
 </head>
 <body>
 
 <div class="container">
+  <h1 class="main-page-title">State and Federal Tax Credit Benefits</h1>
+
   <!-- Top Banner -->
   <div class="top-hero-banner">
     <div>
       <div class="hero-title">Total Redirected Tax Dollars</div>
-      <div class="hero-amount" id="hero-sgo-total">$6,826</div>
+      <div class="hero-amount" id="hero-sgo-total">$0</div>
     </div>
-    <div class="zero-cost-badge">$0 Out-Of-Pocket</div>
+    <div class="zero-cost-badge">$0 Net Out-Of-Pocket</div>
   </div>
 
   <!-- Filing Status Toggle -->
@@ -167,16 +317,16 @@
     <div class="metric-card mo">
       <div>
         <div class="metric-label">MOScholars Credit Limit (MO)</div>
-        <div style="font-size: 0.75rem; color: #64748b;">50% of MO State Tax</div>
+        <div style="font-size: 0.85rem; color: #94a3b8;">50% of MO State Tax</div>
       </div>
-      <div class="metric-val val-mo" id="card-mo-val">$3,426</div>
+      <div class="metric-val" id="card-mo-val">$0</div>
     </div>
     <div class="metric-card fed">
       <div>
         <div class="metric-label">EFTC Credit Limit (Federal)</div>
-        <div style="font-size: 0.75rem; color: #64748b;" id="eftc-subtext">Up to $3,400 Cap (MFJ)</div>
+        <div style="font-size: 0.85rem; color: #94a3b8;" id="eftc-subtext">Up to $3,400 Cap (MFJ)</div>
       </div>
-      <div class="metric-val val-fed" id="card-fed-val">$3,400</div>
+      <div class="metric-val" id="card-fed-val">$0</div>
     </div>
   </div>
 
@@ -184,11 +334,11 @@
   <div class="bar-wrapper">
     <div class="section-title">
       <span>Missouri State Tax Redirection</span>
-      <span id="mo-tax-label">Total MO Tax: $6,853</span>
+      <span id="mo-tax-label">Total MO Tax: $0</span>
     </div>
-    <div class="stacked-bar-container">
-      <div class="bar-segment bg-moscholars" id="bar-moscholars">MOScholars (50%)</div>
-      <div class="bar-segment bg-remaining" id="bar-mo-rem">Remaining State Tax</div>
+    <div class="stacked-bar-container" id="container-mo-bar">
+      <div class="bar-segment bg-moscholars" id="bar-moscholars"><span id="txt-moscholars"></span></div>
+      <div class="bar-segment bg-remaining" id="bar-mo-rem"><span id="txt-mo-rem"></span></div>
     </div>
   </div>
 
@@ -196,16 +346,16 @@
   <div class="bar-wrapper">
     <div class="section-title">
       <span>Federal Tax Redirection (EFTC)</span>
-      <span id="fed-tax-label">Net Federal Tax: $18,006</span>
+      <span id="fed-tax-label">Net Federal Tax: $0</span>
     </div>
-    <div class="stacked-bar-container">
-      <div class="bar-segment bg-eftc" id="bar-eftc">EFTC ($3,400)</div>
-      <div class="bar-segment bg-remaining" id="bar-fed-rem">Remaining Federal Tax</div>
+    <div class="stacked-bar-container" id="container-fed-bar">
+      <div class="bar-segment bg-eftc" id="bar-eftc"><span id="txt-eftc"></span></div>
+      <div class="bar-segment bg-remaining" id="bar-fed-rem"><span id="txt-fed-rem"></span></div>
     </div>
   </div>
 
   <div class="footer-note">
-    *Both MOScholars and EFTC are dollar-for-dollar tax credits. Every dollar donated to an approved SGO directly reduces your state and federal tax bill by $1.00, resulting in <strong>$0 net out-of-pocket cost</strong>.
+    *Both MOScholars and EFTC are dollar-for-dollar tax credits. Every dollar donated to an approved SGO directly reduces your state and federal tax bill by $1.00, resulting in <strong style="color: var(--maize-yellow);">$0 net out-of-pocket cost</strong>.
   </div>
 </div>
 
@@ -214,14 +364,60 @@
 
   const formatCurr = (val) => '$' + Math.round(val).toLocaleString();
 
+  /**
+   * Dynamically formats and scales bar text to guarantee visibility.
+   * Ensures EFTC (and other bar texts) NEVER disappear.
+   */
+  function autoFitBarSegment(segmentEl, textSpanEl, shortPrefix, fullPrefix, amount) {
+    const formattedAmt = formatCurr(amount);
+    
+    // Calculate actual pixel width available inside the segment element
+    const segmentWidth = segmentEl.getBoundingClientRect().width;
+    
+    // Fallback options for text complexity based on available room
+    const options = [
+      `${fullPrefix}: ${formattedAmt}`,
+      `${shortPrefix}: ${formattedAmt}`,
+      `${formattedAmt}`,
+      `${shortPrefix}`,
+      `$${Math.round(amount)}`
+    ];
+
+    // Default starting font size in REM
+    let baseFontSizeRem = 1.05; 
+    let selectedText = options[0];
+
+    // Test text size fit in DOM offscreen / synchronously
+    textSpanEl.style.fontSize = baseFontSizeRem + 'rem';
+    textSpanEl.innerText = selectedText;
+
+    // Iteratively scale down font size or switch to shorter text if overflow occurs
+    let currentOptionIdx = 0;
+    while (currentOptionIdx < options.length - 1 && textSpanEl.offsetWidth > Math.max(segmentWidth - 6, 12)) {
+      if (baseFontSizeRem > 0.65) {
+        baseFontSizeRem -= 0.08;
+      } else {
+        currentOptionIdx++;
+        selectedText = options[currentOptionIdx];
+        baseFontSizeRem = 0.95; // Reset font size higher for shorter phrase
+      }
+      textSpanEl.style.fontSize = baseFontSizeRem + 'rem';
+      textSpanEl.innerText = selectedText;
+    }
+
+    // Absolute minimum fallback for ultra narrow bars (< 25px wide)
+    if (segmentWidth < 22 && segmentWidth > 0) {
+      textSpanEl.style.fontSize = '0.6rem';
+      textSpanEl.innerText = shortPrefix.substring(0, 3);
+    }
+  }
+
   function setFilingStatus(status) {
     filingStatus = status;
     
-    // Toggle active state on buttons
     document.getElementById('btn-mfj').classList.toggle('active', status === 'mfj');
     document.getElementById('btn-single').classList.toggle('active', status === 'single');
     
-    // Update metric card description
     const subtext = status === 'mfj' ? 'Up to $3,400 Cap (MFJ)' : 'Up to $1,700 Cap (Single)';
     document.getElementById('eftc-subtext').innerText = subtext;
 
@@ -281,34 +477,43 @@
     document.getElementById('mo-tax-label').innerText = `Total MO Tax: ${formatCurr(moTax)}`;
     document.getElementById('fed-tax-label').innerText = `Net Federal Tax: ${formatCurr(fedNetTax)}`;
 
-    // Missouri Progress Bar
+    // Missouri Progress Bar width calculation
     const moDenom = moTax > 0 ? moTax : 1;
-    const pctMoScholars = (moScholars / moDenom) * 100;
-    const pctMoRem = (moTaxRemaining / moDenom) * 100;
+    const pctMoScholars = Math.max(2, (moScholars / moDenom) * 100);
+    const pctMoRem = Math.max(0, 100 - pctMoScholars);
 
     const barMoSgo = document.getElementById('bar-moscholars');
     const barMoRem = document.getElementById('bar-mo-rem');
     barMoSgo.style.width = pctMoScholars + '%';
-    barMoSgo.innerText = `MOScholars Credit: ${formatCurr(moScholars)}`;
     barMoRem.style.width = pctMoRem + '%';
-    barMoRem.innerText = `State Tax Owed: ${formatCurr(moTaxRemaining)}`;
 
-    // Federal Progress Bar
+    // Federal Progress Bar width calculation
     const fedDenom = fedNetTax > 0 ? fedNetTax : 1;
-    const pctEftc = (eftc / fedDenom) * 100;
-    const pctFedRem = (fedTaxRemaining / fedDenom) * 100;
+    const pctEftc = Math.max(2, (eftc / fedDenom) * 100);
+    const pctFedRem = Math.max(0, 100 - pctEftc);
 
     const barEftc = document.getElementById('bar-eftc');
     const barFedRem = document.getElementById('bar-fed-rem');
     barEftc.style.width = pctEftc + '%';
-    barEftc.innerText = pctEftc > 5 ? `EFTC Credit: ${formatCurr(eftc)}` : '';
     barFedRem.style.width = pctFedRem + '%';
-    barFedRem.innerText = pctFedRem > 15 ? `Federal Tax Owed: ${formatCurr(fedTaxRemaining)}` : '';
+
+    // Apply dynamic text scaling after width recalculation
+    requestAnimationFrame(() => {
+      autoFitBarSegment(barMoSgo, document.getElementById('txt-moscholars'), 'MOScholars', 'MOScholars Credit', moScholars);
+      autoFitBarSegment(barMoRem, document.getElementById('txt-mo-rem'), 'State Owed', 'State Tax Owed', moTaxRemaining);
+      
+      // EFTC dynamic label fitting: Guaranteed to display regardless of slider width
+      autoFitBarSegment(barEftc, document.getElementById('txt-eftc'), 'EFTC', 'EFTC Credit', eftc);
+      autoFitBarSegment(barFedRem, document.getElementById('txt-fed-rem'), 'Federal Owed', 'Federal Tax Owed', fedTaxRemaining);
+    });
   }
 
+  // Event Listeners
   document.getElementById('agi-slider').addEventListener('input', updateModel);
   document.getElementById('dep-slider').addEventListener('input', updateModel);
+  window.addEventListener('resize', updateModel);
 
+  // Initial call
   updateModel();
 </script>
 </body>
